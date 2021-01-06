@@ -1,94 +1,118 @@
 {
     "componentPath": "./src/wwObject.vue",
-    "options": {
-        "autoByContent": true
-    },
     "editor": {
         "label": {
-            "en": "Button",
-            "fr": "Bouton"
+            "en": "Navigation menu",
+            "fr": "Menu de navigation"
+        },
+        "styleOptions": {
+            "horizontalAlignement": {
+                "label": { "en": "Horizontal alignement", "fr": "Alignement horizontal" },
+                "type": "TextRadioGroup",
+                "options": {
+                    "choices": [
+                        {
+                            "value": "flex-start",
+                            "title": { "en": "Start", "fr": "Début" },
+                            "icon": "align-x-start"
+                        },
+                        {
+                            "value": "center",
+                            "title": { "en": "Center", "fr": "Milieu" },
+                            "icon": "align-x-center"
+                        },
+                        { "value": "flex-end", "title": { "en": "End", "fr": "Fin" }, "icon": "align-x-end" },
+                        {
+                            "value": "space-around",
+                            "title": { "en": "Space around", "fr": "Space around" },
+                            "icon": "align-x-space-around"
+                        },
+                        {
+                            "value": "space-between",
+                            "title": { "en": "Space between", "fr": "Space between" },
+                            "icon": "align-x-space-between"
+                        }
+                    ]
+                }
+            },
+            "verticalAlignement": {
+                "label": { "en": "Vertical alignement", "fr": "Alignement vertical" },
+                "type": "TextRadioGroup",
+                "options": {
+                    "choices": [
+                        { "value": "flex-start", "title": { "en": "Start", "fr": "Début" }, "icon": "align-y-start" },
+                        { "value": "center", "title": { "en": "Center", "fr": "Milieu" }, "icon": "align-y-center" },
+                        { "value": "flex-end", "title": { "en": "End", "fr": "Fin" }, "icon": "align-y-end" },
+                        {
+                            "value": "stretch",
+                            "title": { "en": "Stretch", "fr": "Stretch" },
+                            "icon": "align-y-stretch"
+                        },
+                        {
+                            "value": "baseline",
+                            "title": { "en": "Baseline", "fr": "Baseline" },
+                            "icon": "align-y-baseline"
+                        }
+                    ]
+                }
+            },
+            "pushLast": {
+                "label": { "en": "Push last to the end", "fr": "Push last to the end" },
+                "type": "OnOff"
+            },
+            "fullHeight": {
+                "label": { "en": "Menu fills page height", "fr": "Menu fills page height" },
+                "type": "OnOff"
+            },
+            "backdropColor": {
+                "label": { "en": "Backdrop color" },
+                "type": "Color"
+            }
+        },
+        "settingsOptions": {
+            "menuBreakpoint": {
+                "label": { "en": "Mobile menu starting at" },
+                "type": "TextRadioGroup",
+                "options": {
+                    "choices": [
+                        { "value": "laptop", "title": { "en": "Laptop" }, "icon": "laptop" },
+                        { "value": "tablet", "title": { "en": "Tablet" }, "icon": "tablet" },
+                        { "value": "mobile", "title": { "en": "Mobile" }, "icon": "mobile" }
+                    ]
+                }
+            },
+            "menuType": {
+                "label": { "en": "Menu Type", "fr": "Type de menu" },
+                "type": "TextSelect",
+                "options": {
+                    "options": [
+                        { "value": "dropdown", "label": { "en": "Dropdown" } },
+                        { "value": "left", "label": { "en": "Hover from left" } },
+                        { "value": "right", "label": { "en": "Hover from right" } }
+                    ]
+                }
+            },
+            "toggle": {
+                "type": "Button",
+                "options": {
+                    "text": { "en": "Open mobile menu" },
+                    "action": "toggleMenu"
+                }
+            }
         },
         "menuOptions": {
             "items": [
                 {
-                    "name": "Typography",
-                    "quick": [{ "type": "custom-style", "name": "fontStyle" }],
-                    "icon": "Size"
+                    "name": "Breakpoint",
+                    "quick": [{ "type": "custom-settings", "name": "menuBreakpoint" }],
+                    "icon": "sizing"
                 },
                 {
-                    "name": "Tag",
-                    "quick": [{ "type": "Link" }],
-                    "icon": "link"
+                    "name": "Toggle",
+                    "action": "toggleMenu",
+                    "icon": "menu"
                 }
             ]
-        },
-        "styleOptions": {
-            "fontStyle": {
-                "type": "Typography",
-                "label": {
-                    "en": "Style",
-                    "fr": "Style"
-                }
-            },
-            "transformation": {
-                "label": {
-                    "en": "Character case",
-                    "fr": "Character case"
-                },
-                "type": "TextSelect",
-                "options": {
-                    "options": [
-                        { "value": null, "label": "none" },
-                        { "value": "capitalize", "label": "capitalize" },
-                        { "value": "uppercase", "label": "uppercase" },
-                        { "value": "lowercase", "label": "lowercase" }
-                    ]
-                },
-                "path": "globalStyle.textTransform"
-            },
-            "shadows": {
-                "label": {
-                    "en": "Text Shadows",
-                    "fr": "Ombres du texte"
-                },
-                "type": "Shadows",
-                "options": {
-                    "isText": true
-                },
-                "path": "globalStyle.textShadow"
-            },
-            "lineHeight": {
-                "label": {
-                    "en": "Line height",
-                    "fr": "Hauteur de ligne"
-                },
-                "type": "Length",
-                "options": {
-                    "unitChoices": [{ "value": "px", "label": "px", "min": 0, "max": 100 }]
-                },
-                "path": "globalStyle.lineHeight"
-            },
-            "wordSpacing": {
-                "label": {
-                    "en": "Word spacing",
-                    "fr": "Espacement des mots"
-                },
-                "type": "Length",
-                "options": {
-                    "unitChoices": [{ "value": "px", "label": "px", "min": 0, "max": 100 }]
-                },
-                "path": "globalStyle.wordSpacing"
-            }
-        },
-        "settingsOptions": {
-            "hasLeftIcon": {
-                "label": { "en": "Left icon", "fr": "Icône gauche" },
-                "type": "OnOff"
-            },
-            "hasRightIcon": {
-                "label": { "en": "Right icon", "fr": "Icône droite" },
-                "type": "OnOff"
-            }
         }
     }
 }
