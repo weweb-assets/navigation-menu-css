@@ -89,13 +89,8 @@ export default {
             this.isOpen = !this.isOpen;
 
             if (this.isOpen) {
-                wwLib.getFrontDocument().querySelector('html').classList.add('navigation-menu-no-overflow');
-                wwLib.getFrontDocument().body.classList.add('navigation-menu-no-overflow');
                 this.menuTop = this.$el.getBoundingClientRect().bottom;
                 this.menuMaxHeight = `calc(100vh - ${this.menuTop}px)`;
-            } else {
-                wwLib.getFrontDocument().querySelector('html').classList.remove('navigation-menu-no-overflow');
-                wwLib.getFrontDocument().body.classList.remove('navigation-menu-no-overflow');
             }
         },
     },
@@ -183,11 +178,5 @@ export default {
             }
         }
     }
-}
-</style>
-
-<style>
-.navigation-menu-no-overflow {
-    overflow: hidden;
 }
 </style>
