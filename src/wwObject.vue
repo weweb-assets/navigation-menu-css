@@ -1,18 +1,18 @@
 <template>
-    <div class="navigation-menu" :class="{ withMenu: isMenuDisplayed }">
+    <div class="navigation-menu" :style="navigationStyle" ww-responsive="navigation-menu">
         <wwLayout
             class="navigation-menu__items"
             path="elements"
-            ww-responsive="menuLayout"
+            ww-responsive="menu-layout"
             :placeholderIndex="content.pushLast ? -1 : null"
             :style="layoutStyle"
-            v-show="!isMenuDisplayed"
         ></wwLayout>
         <wwObject
             v-bind="content.button"
             class="navigation-menu__button"
             @click.native="toggleMenu"
-            v-show="isMenuDisplayed"
+            ww-responsive="menu-button"
+            :style="iconStyle"
             >Toggle</wwObject
         >
         <div
@@ -75,6 +75,12 @@ export default {
             return {
                 justifyContent: this.content.horizontalAlignement,
                 alignItems: this.content.verticalAlignement,
+                display: this.isMenuDisplayed ? 'none' : 'flex',
+            };
+        },
+        iconStyle() {
+            return {
+                display: this.isMenuDisplayed ? 'block' : 'none',
             };
         },
     },
@@ -100,10 +106,6 @@ export default {
 .navigation-menu {
     position: relative;
     display: flex;
-
-    &.withMenu {
-        justify-content: flex-end;
-    }
 
     &__items {
         display: flex;
