@@ -17,11 +17,16 @@
         >
         <div
             class="navigation-menu__backdrop"
-            v-if="isOpen && isMenuDisplayed"
+            v-if="isMenuDisplayed"
+            :class="{ open: isOpen }"
             @click.prevent.stop="toggleMenu"
             :style="{ backgroundColor: content.backdropColor }"
         >
-            <div class="navigation-menu__panel" :class="[content.menuType, { full: content.fullHeight }]">
+            <div
+                class="navigation-menu__panel"
+                :class="[content.menuType, { full: content.fullHeight }]"
+                :style="{ top: `${menuTop}px`, 'max-height': menuMaxHeight }"
+            >
                 <wwLayout class="navigation-menu__panel-items" path="elements"></wwLayout>
             </div>
         </div>
@@ -30,7 +35,6 @@
 
 <script>
 export default {
-    name: '__COMPONENT_NAME__',
     wwDefaultContent: {
         elements: [
             { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 1' } } },
@@ -49,6 +53,8 @@ export default {
     data() {
         return {
             isOpen: false,
+            menuTop: 0,
+            menuMaxHeight: '',
         };
     },
     props: {
@@ -75,6 +81,16 @@ export default {
     methods: {
         toggleMenu() {
             this.isOpen = !this.isOpen;
+
+            if (this.isOpen) {
+                wwLib.getFrontDocument().querySelector('html').classList.add('navigation-menu-no-overflow');
+                wwLib.getFrontDocument().body.classList.add('navigation-menu-no-overflow');
+                this.menuTop = this.$el.getBoundingClientRect().bottom;
+                this.menuMaxHeight = `calc(100vh - ${this.menuTop}px)`;
+            } else {
+                wwLib.getFrontDocument().querySelector('html').classList.remove('navigation-menu-no-overflow');
+                wwLib.getFrontDocument().body.classList.remove('navigation-menu-no-overflow');
+            }
         },
     },
 };
@@ -103,6 +119,40 @@ export default {
         min-width: 300px;
     }
 
+    &__panel {
+        z-index: 10;
+        &.right,
+        &.left {
+            position: fixed;
+            top: 0;
+            transition: transform 0.3s ease;
+            &.full {
+                height: 100vh;
+                overflow-y: auto;
+            }
+        }
+        &.right {
+            right: 0;
+            transform: translate(100%, 0);
+        }
+        &.left {
+            left: 0;
+            transform: translate(-100%, 0);
+        }
+        &.dropdown {
+            position: absolute;
+            right: 0;
+            left: 0;
+            top: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            visibility: hidden;
+        }
+        min-width: 30px;
+        background: white;
+        // overflow: auto;
+    }
+
     &__backdrop {
         z-index: 10;
         position: fixed;
@@ -110,33 +160,32 @@ export default {
         left: 0;
         right: 0;
         bottom: 0;
-    }
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+        height: 100vh;
 
-    &__panel {
-        z-index: 10;
-        &.right,
-        &.left {
-            position: fixed;
-            top: 0;
-            &.full {
-                height: 100vh;
+        &.open {
+            opacity: 1;
+            pointer-events: all;
+
+            & .dropdown {
+                pointer-events: all;
+                visibility: visible;
+            }
+            & .right {
+                transform: translate(0, 0);
+            }
+            & .left {
+                transform: translate(0, 0);
             }
         }
-        &.right {
-            right: 0;
-        }
-        &.left {
-            left: 0;
-        }
-        &.dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            left: 0;
-        }
-        min-width: 30px;
-        background: white;
-        overflow: auto;
     }
+}
+</style>
+
+<style>
+.navigation-menu-no-overflow {
+    overflow: hidden;
 }
 </style>
