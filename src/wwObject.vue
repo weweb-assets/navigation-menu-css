@@ -6,6 +6,7 @@
             ww-responsive="menu-layout"
             :placeholderIndex="content.pushLast ? -1 : null"
             :style="layoutStyle"
+            direction="row"
         ></wwLayout>
         <wwObject
             v-bind="content.button"
