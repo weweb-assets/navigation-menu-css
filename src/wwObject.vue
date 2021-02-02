@@ -72,6 +72,10 @@ export default {
                 return this.wwFrontState.screenSize === 'mobile' || this.wwFrontState.screenSize === 'tablet';
             return this.wwFrontState.screenSize === 'mobile';
         },
+        navigationStyle() {
+            if (this.isMenuDisplayed) return { 'justify-content': 'flex-end' };
+            else return { 'justify-content': 'unset' };
+        },
         layoutStyle() {
             return {
                 justifyContent: this.content.horizontalAlignement,
