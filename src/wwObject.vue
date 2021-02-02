@@ -26,7 +26,11 @@
             <div
                 class="navigation-menu__panel"
                 :class="[content.menuType, { full: content.fullHeight }]"
-                :style="{ top: `${menuTop}px`, 'max-height': menuMaxHeight }"
+                :style="{
+                    top: `${menuTop}px`,
+                    'max-height': menuMaxHeight,
+                    'background-color': content.backgroundColor,
+                }"
             >
                 <wwLayout class="navigation-menu__panel-items" path="elements"></wwLayout>
             </div>
@@ -49,6 +53,7 @@ export default {
         fullHeight: wwLib.responsive(true),
         menuType: wwLib.responsive('right'),
         menuBreakpoint: 'mobile',
+        backgroundColor: wwLib.responsive('#FFFFFF'),
         backdropColor: wwLib.responsive('#00000031'),
     },
     data() {

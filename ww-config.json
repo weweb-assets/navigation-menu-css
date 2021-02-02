@@ -64,6 +64,10 @@
                 "label": { "en": "Menu fills page height", "fr": "Menu fills page height" },
                 "type": "OnOff"
             },
+            "backgroundColor": {
+                "label": { "en": "Background color" },
+                "type": "Color"
+            },
             "backdropColor": {
                 "label": { "en": "Backdrop color" },
                 "type": "Color"
