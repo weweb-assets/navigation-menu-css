@@ -24,7 +24,7 @@
             :style="{ backgroundColor: content.backdropColor }"
         >
             <div
-                class="navigation-menu__panel content-panel"
+                class="navigation-menu__panel"
                 :class="[content.menuType, { full: content.fullHeight }]"
                 :style="{
                     top: `${menuTop}px`,
@@ -158,6 +158,12 @@ export default {
         min-width: 30px;
         background: white;
         // overflow: auto;
+
+        overflow-y: scroll;
+        overflow: -moz-scrollbars-none;
+        &::-webkit-scrollbar {
+            width: 0 !important;
+        }
     }
 
     &__backdrop {
@@ -171,14 +177,6 @@ export default {
         transition: opacity 0.3s ease;
         opacity: 0;
         height: 100vh;
-
-        .content-panel {
-            overflow-y: scroll;
-            overflow: -moz-scrollbars-none;
-            &::-webkit-scrollbar {
-                width: 0 !important;
-            }
-        }
 
         &.open {
             opacity: 1;
