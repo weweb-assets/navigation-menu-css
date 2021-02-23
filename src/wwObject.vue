@@ -115,9 +115,9 @@ export default {
     &__items {
         display: flex;
         flex: 1;
-        /deep/ > .ww-layout__placeholder {
-            flex: 1;
-        }
+        // /deep/ > .ww-layout__placeholder {
+        //     flex: 1;
+        // }
     }
 
     &__panel-items {
@@ -171,6 +171,13 @@ export default {
         transition: opacity 0.3s ease;
         opacity: 0;
         height: 100vh;
+
+        &__panel {
+            overflow-y: scroll;
+            &::-webkit-scrollbar {
+                width: 0 !important;
+            }
+        }
 
         &.open {
             opacity: 1;
