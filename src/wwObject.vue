@@ -157,7 +157,12 @@ export default {
         }
         min-width: 30px;
         background: white;
-        // overflow: auto;
+
+        overflow-y: auto;
+        overflow: -moz-scrollbars-none;
+        &::-webkit-scrollbar {
+            width: 0 !important;
+        }
     }
 
     &__backdrop {
