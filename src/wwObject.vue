@@ -115,9 +115,9 @@ export default {
     &__items {
         display: flex;
         flex: 1;
-        // /deep/ > .ww-layout__placeholder {
-        //     flex: 1;
-        // }
+        /deep/ > .ww-layout__placeholder {
+            flex: 1;
+        }
     }
 
     &__panel-items {
