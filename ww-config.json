@@ -105,18 +105,9 @@
             }
         },
         "menuOptions": {
-            "items": [
-                {
-                    "name": "Breakpoint",
-                    "quick": [{ "type": "custom-settings", "name": "menuBreakpoint" }],
-                    "icon": "sizing"
-                },
-                {
-                    "name": "Toggle",
-                    "action": "toggleMenu",
-                    "icon": "menu"
-                }
-            ]
+            "quick": {
+                "sections": ["menuBreakpoints", "toggleMenu"]
+            }
         }
     }
 }
