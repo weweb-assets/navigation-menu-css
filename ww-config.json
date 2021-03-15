@@ -106,7 +106,7 @@
         },
         "menuOptions": {
             "quick": {
-                "sections": ["menuBreakpoints", "toggleMenu"]
+                "sections": ["menuBreakpoint", "toggle"]
             }
         }
     }
