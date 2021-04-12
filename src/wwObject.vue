@@ -1,5 +1,10 @@
 <template>
-    <div class="navigation-menu" :style="navigationStyle" ww-responsive="navigation-menu">
+    <div
+        class="navigation-menu"
+        :style="navigationStyle"
+        ww-responsive="navigation-menu"
+        :class="{ editing: isEditing }"
+    >
         <wwLayout
             class="navigation-menu__items"
             path="elements"
@@ -35,6 +40,11 @@
                 <wwLayout class="navigation-menu__panel-items" path="elements"></wwLayout>
             </div>
         </div>
+        <!-- wwEditor:start -->
+        <div class="navigation-menu__bubble">
+            <wwEditorIcon small name="menu"></wwEditorIcon>
+        </div>
+        <!-- wwEditor:end -->
     </div>
 </template>
 
@@ -202,6 +212,39 @@ export default {
             & .left {
                 transform: translate(0, 0);
             }
+        }
+    }
+    &__bubble {
+        display: flex;
+        position: absolute;
+        top: 5px;
+        left: 0;
+        transform: translate(-50%, -50%);
+        border-radius: 100%;
+        padding: var(--ww-spacing-01);
+        transition: opacity 0.2s ease;
+        z-index: 101;
+        opacity: 0;
+        cursor: pointer;
+        background-color: var(--ww-color-green-500);
+        color: var(--ww-color-white);
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+        &:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 30px;
+            height: 30px;
+        }
+    }
+    &.editing:hover {
+        > .navigation-menu__bubble {
+            opacity: 1;
+            pointer-events: all;
         }
     }
 }
