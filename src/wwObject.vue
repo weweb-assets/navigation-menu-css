@@ -11,7 +11,7 @@
         <wwObject
             v-bind="content.button"
             class="navigation-menu__button"
-            @click.native="toggleMenu"
+            @click.native="triggerToggle"
             ww-responsive="menu-button"
             :style="iconStyle"
             >Toggle</wwObject
@@ -20,7 +20,7 @@
             class="navigation-menu__backdrop"
             v-if="isMenuDisplayed"
             :class="{ open: isOpen }"
-            @click.prevent.stop="toggleMenu"
+            @click.prevent.stop="triggerToggle"
             :style="{ backgroundColor: content.backdropColor }"
         >
             <div
@@ -93,8 +93,19 @@ export default {
                 display: this.isMenuDisplayed ? 'block' : 'none',
             };
         },
+        /* wwEditor: start */
+        isEditing() {
+            return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION;
+        },
+        /* wwEditor: end */
     },
     methods: {
+        triggerToggle() {
+            /* wwEditor:start */
+            if (this.isEditing) return;
+            /* wwEditor:end */
+            this.toggleMenu();
+        },
         toggleMenu() {
             this.isOpen = !this.isOpen;
 
