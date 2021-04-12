@@ -99,7 +99,7 @@
             "toggle": {
                 "type": "Button",
                 "options": {
-                    "text": { "en": "Open mobile menu" },
+                    "text": { "en": "Toggle mobile menu" },
                     "action": "toggleMenu"
                 }
             }
