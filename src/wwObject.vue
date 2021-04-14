@@ -76,9 +76,9 @@ export default {
     props: {
         content: Object,
         wwFrontState: Object,
-        /* wwManager: start */
+        /* wwEditor:start */
         wwEditorState: Object,
-        /* wwManager: end */
+        /* wwEditor:end */
     },
     computed: {
         isMenuDisplayed() {
@@ -103,11 +103,12 @@ export default {
                 display: this.isMenuDisplayed ? 'block' : 'none',
             };
         },
-        /* wwEditor: start */
         isEditing() {
+            /* wwEditor:start */
             return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION;
+            /* wwEditor:end */
+            return false;
         },
-        /* wwEditor: end */
     },
     methods: {
         triggerToggle() {
