@@ -126,6 +126,15 @@ export default {
                 this.menuMaxHeight = `calc(100vh - ${this.menuTop}px)`;
             }
         },
+        closeMenu() {
+            this.isOpen = false;
+        },
+    },
+    mounted() {
+        wwLib.$on('wwLink:clicked', this.closeMenu);
+    },
+    beforeDestroy() {
+        wwLib.$off('wwLink:clicked', this.closeMenu);
     },
 };
 </script>
