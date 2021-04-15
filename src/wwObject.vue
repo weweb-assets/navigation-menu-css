@@ -27,7 +27,8 @@
             :class="{ open: isOpen }"
             @click.prevent.stop="triggerToggle"
             :style="{ backgroundColor: content.backdropColor }"
-        >
+        ></div>
+        <div class="navigation-menu__container" v-if="isMenuDisplayed" :class="{ open: isOpen }">
             <div
                 class="navigation-menu__panel"
                 :class="[content.menuType, { full: content.fullHeight }]"
@@ -149,6 +150,7 @@ export default {
     }
 
     &__panel {
+        pointer-events: all;
         z-index: 10;
         &.right,
         &.left {
@@ -202,6 +204,23 @@ export default {
         &.open {
             opacity: 1;
             pointer-events: all;
+        }
+    }
+
+    &__container {
+        z-index: 11;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+        height: 100vh;
+
+        &.open {
+            opacity: 1;
 
             & .dropdown {
                 pointer-events: all;
