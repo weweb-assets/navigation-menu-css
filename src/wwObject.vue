@@ -7,9 +7,9 @@
     >
         <wwLayout
             class="navigation-menu__items"
+            :class="{ '-pushLast': !!content.pushLast }"
             path="elements"
             ww-responsive="menu-layout"
-            :placeholderIndex="content.pushLast ? -1 : null"
             :style="layoutStyle"
             direction="row"
         ></wwLayout>
@@ -38,7 +38,11 @@
                     'background-color': content.backgroundColor,
                 }"
             >
-                <wwLayout class="navigation-menu__panel-items" path="elements"></wwLayout>
+                <wwLayout
+                    class="navigation-menu__panel-items"
+                    :class="{ '-pushLast': !!content.pushLast }"
+                    path="elements"
+                ></wwLayout>
             </div>
         </div>
         <!-- wwEditor:start -->
@@ -147,8 +151,10 @@ export default {
     &__items {
         display: flex;
         flex: 1;
-        /deep/ > .ww-layout__placeholder {
-            flex: 1;
+        &.-pushLast {
+            /deep/ .ww-layout-item:last-child {
+                margin-left: auto;
+            }
         }
     }
 
@@ -156,6 +162,12 @@ export default {
         display: flex;
         flex-direction: column;
         min-width: 300px;
+        height: 100%;
+        &.-pushLast {
+            /deep/ .ww-layout-item:last-child {
+                margin-top: auto;
+            }
+        }
     }
 
     &__panel {
