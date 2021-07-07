@@ -16,19 +16,19 @@
         <wwObject
             v-bind="content.button"
             class="navigation-menu__button"
-            @click.native="triggerToggle"
             ww-responsive="menu-button"
             :style="iconStyle"
+            @click="triggerToggle"
             >Toggle</wwObject
         >
         <div
-            class="navigation-menu__backdrop"
             v-if="isMenuDisplayed"
+            class="navigation-menu__backdrop"
             :class="{ open: isOpen }"
-            @click.prevent.stop="triggerToggle"
             :style="{ backgroundColor: content.backdropColor }"
+            @click.prevent.stop="triggerToggle"
         ></div>
-        <div class="navigation-menu__container" v-if="isMenuDisplayed" :class="{ open: isOpen }">
+        <div v-if="isMenuDisplayed" class="navigation-menu__container" :class="{ open: isOpen }">
             <div
                 class="navigation-menu__panel"
                 :class="[content.menuType, { full: content.fullHeight }]"
@@ -71,19 +71,19 @@ export default {
         backgroundColor: wwLib.responsive('#FFFFFF'),
         backdropColor: wwLib.responsive('#00000031'),
     },
+    props: {
+        content: { type: Object, required: true },
+        wwFrontState: { type: Object, required: true },
+        /* wwEditor:start */
+        wwEditorState: { type: Object, required: true },
+        /* wwEditor:end */
+    },
     data() {
         return {
             isOpen: false,
             menuTop: 0,
             menuMaxHeight: '',
         };
-    },
-    props: {
-        content: Object,
-        wwFrontState: Object,
-        /* wwEditor:start */
-        wwEditorState: Object,
-        /* wwEditor:end */
     },
     computed: {
         isMenuDisplayed() {
@@ -112,8 +112,15 @@ export default {
             /* wwEditor:start */
             return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION;
             /* wwEditor:end */
+            // eslint-disable-next-line no-unreachable
             return false;
         },
+    },
+    mounted() {
+        wwLib.$on('wwLink:clicked', this.closeMenu);
+    },
+    unmounted() {
+        wwLib.$off('wwLink:clicked', this.closeMenu);
     },
     methods: {
         triggerToggle() {
@@ -133,12 +140,6 @@ export default {
         closeMenu() {
             this.isOpen = false;
         },
-    },
-    mounted() {
-        wwLib.$on('wwLink:clicked', this.closeMenu);
-    },
-    beforeDestroy() {
-        wwLib.$off('wwLink:clicked', this.closeMenu);
     },
 };
 </script>
