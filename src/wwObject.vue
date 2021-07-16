@@ -22,13 +22,13 @@
             >Toggle</wwObject
         >
         <div
-            v-if="isMenuDisplayed"
+            v-show="isMenuDisplayed"
             class="navigation-menu__backdrop"
             :class="{ open: isOpen }"
             :style="{ backgroundColor: content.backdropColor }"
             @click.prevent.stop="triggerToggle"
         ></div>
-        <div v-if="isMenuDisplayed" class="navigation-menu__container" :class="{ open: isOpen }">
+        <div v-show="isMenuDisplayed" class="navigation-menu__container" :class="{ open: isOpen }">
             <div
                 class="navigation-menu__panel"
                 :class="[content.menuType, { full: content.fullHeight }]"
