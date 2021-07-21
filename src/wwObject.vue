@@ -152,11 +152,6 @@ export default {
     &__items {
         display: flex;
         flex: 1;
-        &.-pushLast {
-            /deep/ .ww-layout-item:last-child {
-                margin-left: auto;
-            }
-        }
     }
 
     &__panel-items {
@@ -164,11 +159,6 @@ export default {
         flex-direction: column;
         min-width: 300px;
         height: 100%;
-        &.-pushLast {
-            /deep/ .ww-layout-item:last-child {
-                margin-top: auto;
-            }
-        }
     }
 
     &__panel {
@@ -287,6 +277,22 @@ export default {
         > .navigation-menu__bubble {
             opacity: 1;
             pointer-events: all;
+        }
+    }
+}
+</style>
+
+<style lang="scss">
+.navigation-menu {
+    &__items {
+        &.-pushLast > .ww-layout-item:last-child {
+            margin-left: auto;
+        }
+    }
+
+    &__panel-items {
+        &.-pushLast > .ww-layout-item:last-child {
+            margin-top: auto;
         }
     }
 }
