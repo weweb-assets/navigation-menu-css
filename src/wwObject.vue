@@ -16,7 +16,7 @@
         <wwObject
             v-if="content.triggerType === 'button'"
             v-bind="content.button"
-            class="navigation-menu__button"
+            class="navigation-menu__trigger"
             ww-responsive="menu-button"
             :style="iconStyle"
             @click="triggerToggle"
@@ -25,7 +25,7 @@
         <wwObject
             v-if="content.triggerType === 'icon'"
             v-bind="content.icon"
-            class="navigation-menu__button"
+            class="navigation-menu__trigger"
             ww-responsive="menu-button"
             :style="iconStyle"
             @click="triggerToggle"
@@ -33,7 +33,7 @@
         <wwObject
             v-if="content.triggerType === 'image'"
             v-bind="content.image"
-            class="navigation-menu__button"
+            class="navigation-menu__trigger"
             ww-responsive="menu-button"
             :style="iconStyle"
             @click="triggerToggle"
@@ -191,6 +191,11 @@ export default {
 .navigation-menu {
     position: relative;
     display: flex;
+
+    &__trigger {
+        min-width: 10px;
+        min-height: 10px;
+    }
 
     &__items {
         display: flex;

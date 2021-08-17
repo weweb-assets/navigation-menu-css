@@ -16,6 +16,17 @@ const options = content => {
                   }
                 : {};
         })(),
+        topOrigin: {
+            label: { en: 'Top origin', fr: 'Top origin' },
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { value: 'top', label: { en: 'Top' } },
+                    { value: 'under-navbar', label: { en: 'Under the navbar' } },
+                ],
+            },
+        },
+
         triggerType: {
             label: {
                 en: 'Trigger type',

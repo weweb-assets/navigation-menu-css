@@ -95,16 +95,6 @@
                         { "value": "right", "label": { "en": "Hover from right" } }
                     ]
                 }
-            },
-            "topOrigin": {
-                "label": { "en": "Top origin", "fr": "Top origin" },
-                "type": "TextSelect",
-                "options": {
-                    "options": [
-                        { "value": "top", "label": { "en": "Top" } },
-                        { "value": "under-navbar", "label": { "en": "Under the navbar" } }
-                    ]
-                }
             }
         },
         "menuOptions": {
