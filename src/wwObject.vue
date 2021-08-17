@@ -23,7 +23,7 @@
             >Toggle</wwObject
         >
         <wwObject
-            v-if="content.triggerType === 'icon'"
+            v-else-if="content.triggerType === 'icon'"
             v-bind="content.icon"
             class="navigation-menu__trigger"
             ww-responsive="menu-button"
@@ -31,7 +31,7 @@
             @click="triggerToggle"
         ></wwObject>
         <wwObject
-            v-if="content.triggerType === 'image'"
+            v-else
             v-bind="content.image"
             class="navigation-menu__trigger"
             ww-responsive="menu-button"
