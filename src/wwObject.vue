@@ -14,6 +14,7 @@
             direction="row"
         ></wwLayout>
         <wwObject
+            v-if="content.triggerType === 'button'"
             v-bind="content.button"
             class="navigation-menu__button"
             ww-responsive="menu-button"
@@ -21,6 +22,22 @@
             @click="triggerToggle"
             >Toggle</wwObject
         >
+        <wwObject
+            v-if="content.triggerType === 'icon'"
+            v-bind="content.icon"
+            class="navigation-menu__button"
+            ww-responsive="menu-button"
+            :style="iconStyle"
+            @click="triggerToggle"
+        ></wwObject>
+        <wwObject
+            v-if="content.triggerType === 'image'"
+            v-bind="content.image"
+            class="navigation-menu__button"
+            ww-responsive="menu-button"
+            :style="iconStyle"
+            @click="triggerToggle"
+        ></wwObject>
         <div
             v-show="isMenuDisplayed"
             class="navigation-menu__backdrop"
@@ -32,11 +49,7 @@
             <div
                 class="navigation-menu__panel"
                 :class="[content.menuType, { full: content.fullHeight }]"
-                :style="{
-                    top: `${menuTop}px`,
-                    'max-height': menuMaxHeight,
-                    'background-color': content.backgroundColor,
-                }"
+                :style="navigationPanelStyle"
             >
                 <wwLayout
                     class="navigation-menu__panel-items"
@@ -54,6 +67,10 @@
 </template>
 
 <script>
+/* wwEditor:start */
+import { getSettingsConfigurations } from './configuration';
+/* wwEditor:end */
+
 export default {
     wwDefaultContent: {
         elements: [
@@ -61,7 +78,9 @@ export default {
             { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 2' } } },
             { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 3' } } },
         ],
-        button: { isWwObject: true, type: 'ww-button' },
+        button: wwLib.element('ww-button'),
+        icon: wwLib.element('ww-icon'),
+        image: wwLib.element('ww-image'),
         horizontalAlignement: 'flex-start',
         verticalAlignement: 'center',
         pushLast: false,
@@ -70,6 +89,9 @@ export default {
         menuBreakpoint: 'mobile',
         backgroundColor: wwLib.responsive('#FFFFFF'),
         backdropColor: wwLib.responsive('#00000031'),
+        triggerType: wwLib.responsive('button'),
+        topOrigin: wwLib.responsive('under-navbar'),
+        menuSize: wwLib.responsive('60%'),
     },
     props: {
         content: { type: Object, required: true },
@@ -78,6 +100,11 @@ export default {
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
     },
+    /* wwEditor:start */
+    wwEditorConfiguration({ content }) {
+        return getSettingsConfigurations(content);
+    },
+    /* wwEditor:end */
     data() {
         return {
             isOpen: false,
@@ -108,12 +135,25 @@ export default {
                 display: this.isMenuDisplayed ? 'block' : 'none',
             };
         },
+        navigationPanelStyle() {
+            return {
+                '--menu-size': this.content.menuSize,
+                top: `${this.menuTop}px`,
+                'max-height': this.menuMaxHeight,
+                'background-color': this.content.backgroundColor,
+            };
+        },
         isEditing() {
             /* wwEditor:start */
             return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION;
             /* wwEditor:end */
             // eslint-disable-next-line no-unreachable
             return false;
+        },
+    },
+    watch: {
+        'content.topOrigin'() {
+            if (this.isOpen) this.computeMenuValues();
         },
     },
     mounted() {
@@ -131,11 +171,14 @@ export default {
         },
         toggleMenu() {
             this.isOpen = !this.isOpen;
-
-            if (this.isOpen) {
-                this.menuTop = this.$el.getBoundingClientRect().bottom;
-                this.menuMaxHeight = `calc(100vh - ${this.menuTop}px)`;
-            }
+            if (this.isOpen) this.computeMenuValues();
+        },
+        computeMenuValues() {
+            this.menuTop =
+                this.content.topOrigin === 'top'
+                    ? this.$el.getBoundingClientRect().top
+                    : this.$el.getBoundingClientRect().bottom;
+            this.menuMaxHeight = `calc(100vh - ${this.menuTop}px)`;
         },
         closeMenu() {
             this.isOpen = false;
@@ -157,13 +200,14 @@ export default {
     &__panel-items {
         display: flex;
         flex-direction: column;
-        min-width: 300px;
         height: 100%;
     }
 
     &__panel {
+        --menu-size: '60%';
         pointer-events: all;
         z-index: 10;
+        width: var(--menu-size);
         &.right,
         &.left {
             position: fixed;

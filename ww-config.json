@@ -86,7 +86,7 @@
                 }
             },
             "menuType": {
-                "label": { "en": "Menu Type", "fr": "Type de menu" },
+                "label": { "en": "Menu type", "fr": "Type de menu" },
                 "type": "TextSelect",
                 "options": {
                     "options": [
@@ -96,11 +96,14 @@
                     ]
                 }
             },
-            "toggle": {
-                "type": "Button",
+            "topOrigin": {
+                "label": { "en": "Top origin", "fr": "Top origin" },
+                "type": "TextSelect",
                 "options": {
-                    "text": { "en": "Toggle mobile menu" },
-                    "action": "toggleMenu"
+                    "options": [
+                        { "value": "top", "label": { "en": "Top" } },
+                        { "value": "under-navbar", "label": { "en": "Under the navbar" } }
+                    ]
                 }
             }
         },
