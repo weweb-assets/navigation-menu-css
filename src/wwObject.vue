@@ -13,31 +13,19 @@
             :style="layoutStyle"
             direction="row"
         ></wwLayout>
-        <wwObject
-            v-if="content.triggerType === 'button'"
-            v-bind="content.button"
-            class="navigation-menu__trigger"
-            ww-responsive="menu-button"
-            :style="iconStyle"
-            @click="triggerToggle"
-            >Toggle</wwObject
-        >
-        <wwObject
-            v-else-if="content.triggerType === 'icon'"
-            v-bind="content.icon"
-            class="navigation-menu__trigger"
-            ww-responsive="menu-button"
-            :style="iconStyle"
-            @click="triggerToggle"
-        ></wwObject>
-        <wwObject
-            v-else
-            v-bind="content.image"
-            class="navigation-menu__trigger"
-            ww-responsive="menu-button"
-            :style="iconStyle"
-            @click="triggerToggle"
-        ></wwObject>
+
+        <button class="navigation-menu__trigger" :style="iconStyle" @click="triggerToggle">
+            <wwObject v-if="content.triggerType === 'button'" v-bind="content.button" ww-responsive="menu-button">
+                Toggle
+            </wwObject>
+            <wwObject
+                v-else-if="content.triggerType === 'icon'"
+                v-bind="content.icon"
+                ww-responsive="menu-button"
+            ></wwObject>
+            <wwObject v-else v-bind="content.image" ww-responsive="menu-button"></wwObject>
+        </button>
+
         <div
             v-show="isMenuDisplayed"
             class="navigation-menu__backdrop"
@@ -188,6 +176,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+:root {
+    --menu-size: '60%';
+}
+
 .navigation-menu {
     position: relative;
     display: flex;
@@ -209,7 +201,6 @@ export default {
     }
 
     &__panel {
-        --menu-size: '60%';
         pointer-events: all;
         z-index: 10;
         width: var(--menu-size);

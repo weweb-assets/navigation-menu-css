@@ -1,21 +1,18 @@
 const options = content => {
     return {
-        ...(function () {
-            return content.menuType === 'right' || content.menuType === 'left'
+        menuSize:
+            content.menuType == 'right' || content.menuType == 'left'
                 ? {
-                      menuSize: {
-                          type: 'Length',
-                          label: {
-                              en: 'Menu size',
-                              fr: 'Menu size',
-                          },
-                          options: {
-                              unitChoices: [{ value: '%', label: '%', min: 20, max: 100 }],
-                          },
+                      type: 'Length',
+                      label: {
+                          en: 'Menu size',
+                          fr: 'Menu size',
+                      },
+                      options: {
+                          unitChoices: [{ value: '%', label: '%', min: 20, max: 100 }],
                       },
                   }
-                : {};
-        })(),
+                : {},
         topOrigin: {
             label: { en: 'Top origin', fr: 'Top origin' },
             type: 'TextSelect',
@@ -26,7 +23,6 @@ const options = content => {
                 ],
             },
         },
-
         triggerType: {
             label: {
                 en: 'Trigger type',
