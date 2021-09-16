@@ -14,17 +14,49 @@
             direction="row"
         ></wwLayout>
 
-        <button class="navigation-menu__trigger" :style="iconStyle" @click="triggerToggle">
-            <wwObject v-if="content.triggerType === 'button'" v-bind="content.button" ww-responsive="menu-button">
-                Toggle
-            </wwObject>
+        <button
+            v-if="content.triggerType !== 'button' && displayOpenTrigger"
+            class="navigation-menu__trigger"
+            :style="iconStyle"
+            @click="triggerToggle"
+        >
+            <wwObject v-bind="content.triggerElement" ww-responsive="menu-button"></wwObject>
+        </button>
+        <div
+            v-else-if="content.triggerType === 'button' && displayOpenTrigger"
+            class="navigation-menu__trigger"
+            :style="iconStyle"
+            @click="triggerToggle"
+        >
+            <wwObject v-bind="content.triggerElement" ww-responsive="menu-button"></wwObject>
+        </div>
+
+        <button
+            v-if="content.triggerType !== 'button' && displayCloseTrigger"
+            class="navigation-menu__trigger"
+            :style="iconStyle"
+            @click="triggerToggle"
+        >
             <wwObject
-                v-else-if="content.triggerType === 'icon'"
-                v-bind="content.icon"
+                class="closeElement"
+                :class="{ editing: isEditing }"
+                v-bind="content.closeElement"
                 ww-responsive="menu-button"
             ></wwObject>
-            <wwObject v-else v-bind="content.image" ww-responsive="menu-button"></wwObject>
         </button>
+        <div
+            v-else-if="content.triggerType === 'button' && displayCloseTrigger"
+            class="navigation-menu__trigger"
+            :style="iconStyle"
+            @click="triggerToggle"
+        >
+            <wwObject
+                class="closeElement"
+                :class="{ editing: isEditing }"
+                v-bind="content.closeElement"
+                ww-responsive="menu-button"
+            ></wwObject>
+        </div>
 
         <div
             v-show="isMenuDisplayed"
@@ -43,7 +75,8 @@
                     class="navigation-menu__panel-items"
                     :class="{ '-pushLast': !!content.pushLast }"
                     path="elements"
-                ></wwLayout>
+                >
+                </wwLayout>
             </div>
         </div>
         <!-- wwEditor:start -->
@@ -66,9 +99,9 @@ export default {
             { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 2' } } },
             { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 3' } } },
         ],
-        button: wwLib.element('ww-button'),
-        icon: wwLib.element('ww-icon'),
-        image: wwLib.element('ww-image'),
+        triggerElement: wwLib.element('ww-button'),
+        closeTrigger: false,
+        closeElement: null,
         horizontalAlignement: 'flex-start',
         verticalAlignement: 'center',
         pushLast: false,
@@ -93,6 +126,7 @@ export default {
         return getSettingsConfigurations(content);
     },
     /* wwEditor:end */
+    emits: ['update:content'],
     data() {
         return {
             isOpen: false,
@@ -138,17 +172,46 @@ export default {
             // eslint-disable-next-line no-unreachable
             return false;
         },
+        displayOpenTrigger() {
+            if (!this.content.closeTrigger) {
+                return true;
+            } else if (this.content.closeTrigger && !this.isOpen) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        displayCloseTrigger() {
+            return this.content.closeTrigger && this.isOpen;
+        },
     },
     watch: {
         'content.topOrigin'() {
             if (this.isOpen) this.computeMenuValues();
         },
+        'content.triggerType'(newVal) {
+            this.updateTriggerType(newVal);
+        },
+        'content.closeTrigger'(newVal) {
+            if (newVal) {
+                this.handleCloseElement();
+                wwLib.$on('wwLink:closePopup', this.closeMenu);
+            } else {
+                this.$emit('update:content', { closeElement: null });
+                wwLib.$off('wwLink:closePopup', this.closeMenu);
+            }
+        },
     },
     mounted() {
         wwLib.$on('wwLink:clicked', this.closeMenu);
+
+        if (this.content.closeTrigger) {
+            wwLib.$on('wwLink:closePopup', this.closeMenu);
+        }
     },
     unmounted() {
         wwLib.$off('wwLink:clicked', this.closeMenu);
+        wwLib.$off('wwLink:closePopup', this.closeMenu);
     },
     methods: {
         triggerToggle() {
@@ -171,6 +234,71 @@ export default {
         closeMenu() {
             this.isOpen = false;
         },
+        async updateTriggerType(type) {
+            let triggerElement, closeElement;
+
+            switch (type) {
+                case 'button':
+                    triggerElement = await wwLib.createElement('ww-button', { text: 'Open menu' });
+                    this.$emit('update:content', { triggerElement });
+
+                    if (this.content.closeTrigger) {
+                        closeElement = await wwLib.createElement('ww-button', { text: 'Close menu' });
+                        this.$emit('update:content', { closeElement });
+                    }
+                    break;
+                case 'icon':
+                    triggerElement = await wwLib.createElement('ww-icon', { icon: 'fas fa-bars' });
+                    this.$emit('update:content', { triggerElement });
+
+                    if (this.content.closeTrigger) {
+                        closeElement = await wwLib.createElement('ww-icon', { icon: 'fas fa-times' });
+                        this.$emit('update:content', { closeElement });
+                    }
+                    break;
+                case 'image':
+                    triggerElement = await wwLib.createElement(
+                        'ww-image',
+                        { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
+                        { style: { default: { width: '30px', height: '30px' } } }
+                    );
+                    this.$emit('update:content', { triggerElement });
+
+                    if (this.content.closeTrigger) {
+                        closeElement = await wwLib.createElement(
+                            'ww-image',
+                            { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
+                            { style: { default: { width: '30px', height: '30px' } } }
+                        );
+                        this.$emit('update:content', { closeElement });
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        },
+        async handleCloseElement() {
+            let closeElement;
+
+            switch (this.content.triggerType) {
+                case 'button':
+                    closeElement = await wwLib.createElement('ww-button');
+                    this.$emit('update:content', { closeElement });
+                    break;
+                case 'icon':
+                    closeElement = await wwLib.createElement('ww-icon');
+                    this.$emit('update:content', { closeElement });
+                    break;
+                case 'image':
+                    closeElement = await wwLib.createElement('ww-image');
+                    this.$emit('update:content', { closeElement });
+                    break;
+
+                default:
+                    break;
+            }
+        },
     },
 };
 </script>
@@ -187,6 +315,12 @@ export default {
     &__trigger {
         min-width: 10px;
         min-height: 10px;
+
+        .closeElement {
+            &.editing {
+                z-index: 11;
+            }
+        }
     }
 
     &__items {
@@ -201,6 +335,7 @@ export default {
     }
 
     &__panel {
+        overflow: visible;
         pointer-events: all;
         z-index: 10;
         width: var(--menu-size);

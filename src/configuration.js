@@ -37,6 +37,13 @@ const options = content => {
                 ],
             },
         },
+        closeTrigger: {
+            label: {
+                en: 'Different element for closing',
+                fr: 'Element different pour fermer',
+            },
+            type: 'OnOff',
+        },
         toggle: {
             type: 'Button',
             options: {
