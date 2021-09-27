@@ -20,7 +20,7 @@
             :style="iconStyle"
             @click="triggerToggle"
         >
-            <wwObject v-bind="content.triggerElement" ww-responsive="menu-button"></wwObject>
+            <wwObject v-bind="content.button" ww-responsive="menu-button"></wwObject>
         </button>
         <div
             v-else-if="content.triggerType === 'button' && displayOpenTrigger"
@@ -28,7 +28,7 @@
             :style="iconStyle"
             @click="triggerToggle"
         >
-            <wwObject v-bind="content.triggerElement" ww-responsive="menu-button"></wwObject>
+            <wwObject v-bind="content.button" ww-responsive="menu-button"></wwObject>
         </div>
 
         <button
@@ -99,7 +99,8 @@ export default {
             { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 2' } } },
             { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 3' } } },
         ],
-        triggerElement: wwLib.element('ww-button'),
+        // Is called button to ensure backward compatibility
+        button: wwLib.element('ww-button'),
         closeTrigger: false,
         closeElement: null,
         horizontalAlignement: 'flex-start',
@@ -112,7 +113,7 @@ export default {
         backdropColor: wwLib.responsive('#00000031'),
         triggerType: wwLib.responsive('button'),
         topOrigin: wwLib.responsive('under-navbar'),
-        menuSize: wwLib.responsive('60%'),
+        menuSize: this.content.menuType === 'dropdown' ? wwLib.responsive('100%') : wwLib.responsive('60%'),
     },
     props: {
         content: { type: Object, required: true },
