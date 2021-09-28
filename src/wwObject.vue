@@ -113,7 +113,7 @@ export default {
         backdropColor: wwLib.responsive('#00000031'),
         triggerType: wwLib.responsive('button'),
         topOrigin: wwLib.responsive('under-navbar'),
-        menuSize: wwLib.responsive('100%'),
+        menuSize: wwLib.responsive('60%'),
     },
     props: {
         content: { type: Object, required: true },
