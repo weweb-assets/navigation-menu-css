@@ -99,7 +99,7 @@ export default {
             { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 2' } } },
             { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 3' } } },
         ],
-        // Is called button to ensure backward compatibility
+        // It's called button to ensure backward compatibility
         button: wwLib.element('ww-button'),
         closeTrigger: false,
         closeElement: null,
@@ -113,7 +113,7 @@ export default {
         backdropColor: wwLib.responsive('#00000031'),
         triggerType: wwLib.responsive('button'),
         topOrigin: wwLib.responsive('under-navbar'),
-        menuSize: this.content.menuType === 'dropdown' ? wwLib.responsive('100%') : wwLib.responsive('60%'),
+        menuSize: wwLib.responsive('100%'),
     },
     props: {
         content: { type: Object, required: true },
@@ -160,7 +160,7 @@ export default {
         },
         navigationPanelStyle() {
             return {
-                '--menu-size': this.content.menuSize,
+                '--menu-size': this.content.menuType === 'dropdown' ? '100%' : this.content.menuSize,
                 top: `${this.menuTop}px`,
                 'max-height': this.menuMaxHeight,
                 'background-color': this.content.backgroundColor,
