@@ -17,51 +17,46 @@
         <button
             v-if="content.triggerType !== 'button' && displayOpenTrigger"
             class="navigation-menu__trigger"
+            ww-responsive="menu-button"
             :style="iconStyle"
             @click="triggerToggle"
         >
-            <wwObject v-bind="content.button" ww-responsive="menu-button"></wwObject>
+            <wwObject v-bind="content.button"></wwObject>
         </button>
         <div
             v-else-if="content.triggerType === 'button' && displayOpenTrigger"
             class="navigation-menu__trigger"
+            ww-responsive="menu-button"
             :style="iconStyle"
             @click="triggerToggle"
         >
-            <wwObject v-bind="content.button" ww-responsive="menu-button"></wwObject>
+            <wwObject v-bind="content.button"></wwObject>
         </div>
 
         <button
             v-if="content.triggerType !== 'button' && displayCloseTrigger"
             class="navigation-menu__trigger"
+            ww-responsive="menu-button-close"
             :style="iconStyle"
             @click="triggerToggle"
         >
-            <wwObject
-                class="closeElement"
-                :class="{ editing: isEditing }"
-                v-bind="content.closeElement"
-                ww-responsive="menu-button"
-            ></wwObject>
+            <wwObject class="closeElement" :class="{ editing: isEditing }" v-bind="content.closeElement"></wwObject>
         </button>
         <div
             v-else-if="content.triggerType === 'button' && displayCloseTrigger"
             class="navigation-menu__trigger"
+            ww-responsive="menu-button-close"
             :style="iconStyle"
             @click="triggerToggle"
         >
-            <wwObject
-                class="closeElement"
-                :class="{ editing: isEditing }"
-                v-bind="content.closeElement"
-                ww-responsive="menu-button"
-            ></wwObject>
+            <wwObject class="closeElement" :class="{ editing: isEditing }" v-bind="content.closeElement"></wwObject>
         </div>
 
         <div
             v-show="isMenuDisplayed"
             class="navigation-menu__backdrop"
             :class="{ open: isOpen }"
+            ww-responsive="backdrop"
             :style="{ backgroundColor: content.backdropColor }"
             @click.prevent.stop="triggerToggle"
         ></div>
@@ -69,6 +64,7 @@
             <div
                 class="navigation-menu__panel"
                 :class="[content.menuType, { full: content.fullHeight }]"
+                ww-responsive="panel"
                 :style="navigationPanelStyle"
             >
                 <wwLayout
