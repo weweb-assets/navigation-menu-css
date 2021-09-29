@@ -86,7 +86,7 @@
                 }
             },
             "menuType": {
-                "label": { "en": "Menu Type", "fr": "Type de menu" },
+                "label": { "en": "Menu type", "fr": "Type de menu" },
                 "type": "TextSelect",
                 "options": {
                     "options": [
@@ -94,13 +94,6 @@
                         { "value": "left", "label": { "en": "Hover from left" } },
                         { "value": "right", "label": { "en": "Hover from right" } }
                     ]
-                }
-            },
-            "toggle": {
-                "type": "Button",
-                "options": {
-                    "text": { "en": "Toggle mobile menu" },
-                    "action": "toggleMenu"
                 }
             }
         },

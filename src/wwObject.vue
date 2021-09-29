@@ -13,14 +13,51 @@
             :style="layoutStyle"
             direction="row"
         ></wwLayout>
-        <wwObject
-            v-bind="content.button"
-            class="navigation-menu__button"
-            ww-responsive="menu-button"
+
+        <button
+            v-if="content.triggerType !== 'button' && displayOpenTrigger"
+            class="navigation-menu__trigger"
             :style="iconStyle"
             @click="triggerToggle"
-            >Toggle</wwObject
         >
+            <wwObject v-bind="content.button" ww-responsive="menu-button"></wwObject>
+        </button>
+        <div
+            v-else-if="content.triggerType === 'button' && displayOpenTrigger"
+            class="navigation-menu__trigger"
+            :style="iconStyle"
+            @click="triggerToggle"
+        >
+            <wwObject v-bind="content.button" ww-responsive="menu-button"></wwObject>
+        </div>
+
+        <button
+            v-if="content.triggerType !== 'button' && displayCloseTrigger"
+            class="navigation-menu__trigger"
+            :style="iconStyle"
+            @click="triggerToggle"
+        >
+            <wwObject
+                class="closeElement"
+                :class="{ editing: isEditing }"
+                v-bind="content.closeElement"
+                ww-responsive="menu-button"
+            ></wwObject>
+        </button>
+        <div
+            v-else-if="content.triggerType === 'button' && displayCloseTrigger"
+            class="navigation-menu__trigger"
+            :style="iconStyle"
+            @click="triggerToggle"
+        >
+            <wwObject
+                class="closeElement"
+                :class="{ editing: isEditing }"
+                v-bind="content.closeElement"
+                ww-responsive="menu-button"
+            ></wwObject>
+        </div>
+
         <div
             v-show="isMenuDisplayed"
             class="navigation-menu__backdrop"
@@ -32,17 +69,14 @@
             <div
                 class="navigation-menu__panel"
                 :class="[content.menuType, { full: content.fullHeight }]"
-                :style="{
-                    top: `${menuTop}px`,
-                    'max-height': menuMaxHeight,
-                    'background-color': content.backgroundColor,
-                }"
+                :style="navigationPanelStyle"
             >
                 <wwLayout
                     class="navigation-menu__panel-items"
                     :class="{ '-pushLast': !!content.pushLast }"
                     path="elements"
-                ></wwLayout>
+                >
+                </wwLayout>
             </div>
         </div>
         <!-- wwEditor:start -->
@@ -54,6 +88,10 @@
 </template>
 
 <script>
+/* wwEditor:start */
+import { getSettingsConfigurations } from './configuration';
+/* wwEditor:end */
+
 export default {
     wwDefaultContent: {
         elements: [
@@ -61,7 +99,10 @@ export default {
             { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 2' } } },
             { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 3' } } },
         ],
-        button: { isWwObject: true, type: 'ww-button' },
+        // It's called button to ensure backward compatibility
+        button: wwLib.element('ww-button'),
+        closeTrigger: false,
+        closeElement: null,
         horizontalAlignement: 'flex-start',
         verticalAlignement: 'center',
         pushLast: false,
@@ -70,6 +111,9 @@ export default {
         menuBreakpoint: 'mobile',
         backgroundColor: wwLib.responsive('#FFFFFF'),
         backdropColor: wwLib.responsive('#00000031'),
+        triggerType: wwLib.responsive('button'),
+        topOrigin: wwLib.responsive('under-navbar'),
+        menuSize: wwLib.responsive('60%'),
     },
     props: {
         content: { type: Object, required: true },
@@ -78,6 +122,12 @@ export default {
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
     },
+    /* wwEditor:start */
+    wwEditorConfiguration({ content }) {
+        return getSettingsConfigurations(content);
+    },
+    /* wwEditor:end */
+    emits: ['update:content'],
     data() {
         return {
             isOpen: false,
@@ -108,6 +158,14 @@ export default {
                 display: this.isMenuDisplayed ? 'block' : 'none',
             };
         },
+        navigationPanelStyle() {
+            return {
+                '--menu-size': this.content.menuType === 'dropdown' ? '100%' : this.content.menuSize,
+                top: `${this.menuTop}px`,
+                'max-height': this.menuMaxHeight,
+                'background-color': this.content.backgroundColor,
+            };
+        },
         isEditing() {
             /* wwEditor:start */
             return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION;
@@ -115,12 +173,46 @@ export default {
             // eslint-disable-next-line no-unreachable
             return false;
         },
+        displayOpenTrigger() {
+            if (!this.content.closeTrigger) {
+                return true;
+            } else if (this.content.closeTrigger && !this.isOpen) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        displayCloseTrigger() {
+            return this.content.closeTrigger && this.isOpen;
+        },
+    },
+    watch: {
+        'content.topOrigin'() {
+            if (this.isOpen) this.computeMenuValues();
+        },
+        'content.triggerType'(newVal) {
+            this.updateTriggerType(newVal);
+        },
+        'content.closeTrigger'(newVal) {
+            if (newVal) {
+                this.handleCloseElement();
+                wwLib.$on('wwLink:closePopup', this.closeMenu);
+            } else {
+                this.$emit('update:content', { closeElement: null });
+                wwLib.$off('wwLink:closePopup', this.closeMenu);
+            }
+        },
     },
     mounted() {
         wwLib.$on('wwLink:clicked', this.closeMenu);
+
+        if (this.content.closeTrigger) {
+            wwLib.$on('wwLink:closePopup', this.closeMenu);
+        }
     },
     unmounted() {
         wwLib.$off('wwLink:clicked', this.closeMenu);
+        wwLib.$off('wwLink:closePopup', this.closeMenu);
     },
     methods: {
         triggerToggle() {
@@ -131,23 +223,106 @@ export default {
         },
         toggleMenu() {
             this.isOpen = !this.isOpen;
-
-            if (this.isOpen) {
-                this.menuTop = this.$el.getBoundingClientRect().bottom;
-                this.menuMaxHeight = `calc(100vh - ${this.menuTop}px)`;
-            }
+            if (this.isOpen) this.computeMenuValues();
+        },
+        computeMenuValues() {
+            this.menuTop =
+                this.content.topOrigin === 'top'
+                    ? this.$el.getBoundingClientRect().top
+                    : this.$el.getBoundingClientRect().bottom;
+            this.menuMaxHeight = `calc(100vh - ${this.menuTop}px)`;
         },
         closeMenu() {
             this.isOpen = false;
+        },
+        async updateTriggerType(type) {
+            let triggerElement, closeElement;
+
+            switch (type) {
+                case 'button':
+                    triggerElement = await wwLib.createElement('ww-button', { text: 'Open menu' });
+                    this.$emit('update:content', { button: triggerElement });
+
+                    if (this.content.closeTrigger) {
+                        closeElement = await wwLib.createElement('ww-button', { text: 'Close menu' });
+                        this.$emit('update:content', { closeElement });
+                    }
+                    break;
+                case 'icon':
+                    triggerElement = await wwLib.createElement('ww-icon', { icon: 'fas fa-bars' });
+                    this.$emit('update:content', { button: triggerElement });
+
+                    if (this.content.closeTrigger) {
+                        closeElement = await wwLib.createElement('ww-icon', { icon: 'fas fa-times' });
+                        this.$emit('update:content', { closeElement });
+                    }
+                    break;
+                case 'image':
+                    triggerElement = await wwLib.createElement(
+                        'ww-image',
+                        { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
+                        { style: { default: { width: '30px', height: '30px' } } }
+                    );
+                    this.$emit('update:content', { button: triggerElement });
+
+                    if (this.content.closeTrigger) {
+                        closeElement = await wwLib.createElement(
+                            'ww-image',
+                            { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
+                            { style: { default: { width: '30px', height: '30px' } } }
+                        );
+                        this.$emit('update:content', { closeElement });
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        },
+        async handleCloseElement() {
+            let closeElement;
+
+            switch (this.content.triggerType) {
+                case 'button':
+                    closeElement = await wwLib.createElement('ww-button');
+                    this.$emit('update:content', { closeElement });
+                    break;
+                case 'icon':
+                    closeElement = await wwLib.createElement('ww-icon');
+                    this.$emit('update:content', { closeElement });
+                    break;
+                case 'image':
+                    closeElement = await wwLib.createElement('ww-image');
+                    this.$emit('update:content', { closeElement });
+                    break;
+
+                default:
+                    break;
+            }
         },
     },
 };
 </script>
 
 <style lang="scss" scoped>
+:root {
+    --menu-size: '60%';
+}
+
 .navigation-menu {
     position: relative;
     display: flex;
+
+    &__trigger {
+        min-width: 10px;
+        min-height: 10px;
+
+        .closeElement {
+            &.editing {
+                z-index: 11;
+            }
+        }
+    }
 
     &__items {
         display: flex;
@@ -157,13 +332,14 @@ export default {
     &__panel-items {
         display: flex;
         flex-direction: column;
-        min-width: 300px;
         height: 100%;
     }
 
     &__panel {
+        overflow: visible;
         pointer-events: all;
         z-index: 10;
+        width: var(--menu-size);
         &.right,
         &.left {
             position: fixed;
