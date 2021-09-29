@@ -84,33 +84,7 @@
 </template>
 
 <script>
-/* wwEditor:start */
-import { getSettingsConfigurations } from './configuration';
-/* wwEditor:end */
-
 export default {
-    wwDefaultContent: {
-        elements: [
-            { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 1' } } },
-            { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 2' } } },
-            { isWwObject: true, type: 'ww-text', content: { text: { en: 'Lien 3' } } },
-        ],
-        // It's called button to ensure backward compatibility
-        button: wwLib.element('ww-button'),
-        closeTrigger: false,
-        closeElement: null,
-        horizontalAlignement: 'flex-start',
-        verticalAlignement: 'center',
-        pushLast: false,
-        fullHeight: wwLib.responsive(true),
-        menuType: wwLib.responsive('right'),
-        menuBreakpoint: 'mobile',
-        backgroundColor: wwLib.responsive('#FFFFFF'),
-        backdropColor: wwLib.responsive('#00000031'),
-        triggerType: wwLib.responsive('button'),
-        topOrigin: wwLib.responsive('under-navbar'),
-        menuSize: wwLib.responsive('60%'),
-    },
     props: {
         content: { type: Object, required: true },
         wwFrontState: { type: Object, required: true },
@@ -118,11 +92,6 @@ export default {
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
     },
-    /* wwEditor:start */
-    wwEditorConfiguration({ content }) {
-        return getSettingsConfigurations(content);
-    },
-    /* wwEditor:end */
     emits: ['update:content'],
     data() {
         return {
