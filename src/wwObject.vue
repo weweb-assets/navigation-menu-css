@@ -241,7 +241,7 @@ export default {
             switch (type) {
                 case 'button':
                     triggerElement = await wwLib.createElement('ww-button', { text: 'Open menu' });
-                    this.$emit('update:content', { triggerElement });
+                    this.$emit('update:content', { button: triggerElement });
 
                     if (this.content.closeTrigger) {
                         closeElement = await wwLib.createElement('ww-button', { text: 'Close menu' });
@@ -250,7 +250,7 @@ export default {
                     break;
                 case 'icon':
                     triggerElement = await wwLib.createElement('ww-icon', { icon: 'fas fa-bars' });
-                    this.$emit('update:content', { triggerElement });
+                    this.$emit('update:content', { button: triggerElement });
 
                     if (this.content.closeTrigger) {
                         closeElement = await wwLib.createElement('ww-icon', { icon: 'fas fa-times' });
@@ -263,7 +263,7 @@ export default {
                         { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
                         { style: { default: { width: '30px', height: '30px' } } }
                     );
-                    this.$emit('update:content', { triggerElement });
+                    this.$emit('update:content', { button: triggerElement });
 
                     if (this.content.closeTrigger) {
                         closeElement = await wwLib.createElement(
