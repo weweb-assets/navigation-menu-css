@@ -13,7 +13,6 @@
             :style="layoutStyle"
             direction="row"
         ></wwLayout>
-
         <button
             v-if="content.triggerType !== 'button' && displayOpenTrigger"
             class="navigation-menu__trigger"
@@ -21,7 +20,7 @@
             :style="iconStyle"
             @click="triggerToggle"
         >
-            <wwObject v-bind="content.button"></wwObject>
+            <wwElement v-bind="content.button"></wwElement>
         </button>
         <div
             v-else-if="content.triggerType === 'button' && displayOpenTrigger"
@@ -30,7 +29,7 @@
             :style="iconStyle"
             @click="triggerToggle"
         >
-            <wwObject v-bind="content.button"></wwObject>
+            <wwElement v-bind="content.button"></wwElement>
         </div>
 
         <button
@@ -40,7 +39,7 @@
             :style="iconStyle"
             @click="triggerToggle"
         >
-            <wwObject class="closeElement" :class="{ editing: isEditing }" v-bind="content.closeElement"></wwObject>
+            <wwElement class="closeElement" :class="{ editing: isEditing }" v-bind="content.closeElement"></wwElement>
         </button>
         <div
             v-else-if="content.triggerType === 'button' && displayCloseTrigger"
@@ -49,7 +48,7 @@
             :style="iconStyle"
             @click="triggerToggle"
         >
-            <wwObject class="closeElement" :class="{ editing: isEditing }" v-bind="content.closeElement"></wwObject>
+            <wwElement class="closeElement" :class="{ editing: isEditing }" v-bind="content.closeElement"></wwElement>
         </div>
 
         <div
