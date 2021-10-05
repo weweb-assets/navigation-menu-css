@@ -187,7 +187,7 @@ export default {
         button: {
             // It's called button to ensure backward compatibility
             hidden: true,
-            defaultValue: wwLib.element('ww-button'),
+            defaultValue: {isWwObject: true, type: "ww-button"},
         },
         closeElement: {
             hidden: true,
