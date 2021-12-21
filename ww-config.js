@@ -12,7 +12,7 @@ export default {
     },
     properties: {
         horizontalAlignement: {
-            label: { en: 'Horizontal alignement', fr: 'Alignement horizontal' },
+            label: { en: 'Horizontal alignment', fr: 'Alignement horizontal' },
             type: 'TextRadioGroup',
             options: {
                 choices: [
@@ -42,7 +42,7 @@ export default {
             defaultValue: 'flex-start',
         },
         verticalAlignement: {
-            label: { en: 'Vertical alignement', fr: 'Alignement vertical' },
+            label: { en: 'Vertical alignment', fr: 'Alignement vertical' },
             type: 'TextRadioGroup',
             options: {
                 choices: [
