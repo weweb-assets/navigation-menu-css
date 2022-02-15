@@ -13,57 +13,58 @@
             :style="layoutStyle"
             direction="row"
         ></wwLayout>
-        <template v-if="useMobileMenu">
-            <input
-                id="hidden-trigger"
-                type="checkbox"
-                :checked="displayForEdition"
-                :disabled="isEditing"
-                :class="{ disabled: isEditing }"
-            />
-            <label id="trigger-wrapper" for="hidden-trigger">
-                <div
-                    class="navigation-menu__trigger open-trigger"
-                    :class="{ 'keep-visible': !content.closeTrigger }"
-                    ww-responsive="menu-button"
-                >
-                    <wwElement v-bind="content.button"></wwElement>
-                </div>
-
-                <div
-                    v-if="content.closeTrigger"
-                    class="navigation-menu__trigger close-trigger"
-                    ww-responsive="menu-button-close"
-                >
-                    <wwElement
-                        class="closeElement"
-                        :class="{ editing: isEditing }"
-                        v-bind="content.closeElement"
-                    ></wwElement>
-                </div>
-            </label>
+        <input
+            v-show="useMobileMenu"
+            id="hidden-trigger"
+            type="checkbox"
+            :checked="displayForEdition"
+            :disabled="isEditing"
+            :class="{ disabled: isEditing }"
+            ww-responsive="menu-hidden-trigger"
+        />
+        <label v-show="useMobileMenu" id="trigger-wrapper" for="hidden-trigger" ww-responsive="menu-trigger-label">
+            <div
+                class="navigation-menu__trigger open-trigger"
+                :class="{ 'keep-visible': !content.closeTrigger }"
+                ww-responsive="menu-button"
+            >
+                <wwElement v-bind="content.button"></wwElement>
+            </div>
 
             <div
-                class="navigation-menu__backdrop"
-                ww-responsive="backdrop"
-                :style="{ '--menu-top': content.menuTopOrigin, backgroundColor: content.backdropColor }"
-            ></div>
-            <div class="navigation-menu__container">
-                <div
-                    class="navigation-menu__panel"
-                    :class="[content.menuType, { full: content.fullHeight }]"
-                    ww-responsive="panel"
-                    :style="navigationPanelStyle"
-                >
-                    <wwLayout
-                        class="navigation-menu__panel-items"
-                        :class="{ '-pushLast': !!content.pushLast }"
-                        path="elements"
-                    >
-                    </wwLayout>
-                </div>
+                v-if="content.closeTrigger"
+                class="navigation-menu__trigger close-trigger"
+                ww-responsive="menu-button-close"
+            >
+                <wwElement
+                    class="closeElement"
+                    :class="{ editing: isEditing }"
+                    v-bind="content.closeElement"
+                ></wwElement>
             </div>
-        </template>
+        </label>
+
+        <div
+            v-show="useMobileMenu"
+            class="navigation-menu__backdrop"
+            ww-responsive="backdrop"
+            :style="{ '--menu-top': content.menuTopOrigin, backgroundColor: content.backdropColor }"
+        ></div>
+        <div v-show="useMobileMenu" class="navigation-menu__container">
+            <div
+                class="navigation-menu__panel"
+                :class="[content.menuType, { full: content.fullHeight }]"
+                ww-responsive="panel"
+                :style="navigationPanelStyle"
+            >
+                <wwLayout
+                    class="navigation-menu__panel-items"
+                    :class="{ '-pushLast': !!content.pushLast }"
+                    path="elements"
+                >
+                </wwLayout>
+            </div>
+        </div>
         <!-- wwEditor:start -->
         <div class="navigation-menu__bubble">
             <wwEditorIcon small name="menu"></wwEditorIcon>
