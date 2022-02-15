@@ -14,49 +14,33 @@
             direction="row"
         ></wwLayout>
         <template v-if="useMobileMenu">
-            <input id="hidden-trigger" type="checkbox" :checked="displayForEdition" :disabled="displayForEdition" />
+            <input
+                id="hidden-trigger"
+                type="checkbox"
+                :checked="displayForEdition"
+                :disabled="isEditing"
+                :class="{ disabled: isEditing }"
+            />
             <label id="trigger-wrapper" for="hidden-trigger">
-                <template v-if="content.triggerType === 'button'">
-                    <div
-                        class="navigation-menu__trigger open-trigger"
-                        :class="{ 'keep-visible': !content.closeTrigger }"
-                        ww-responsive="menu-button"
-                    >
-                        <wwElement v-bind="content.button"></wwElement>
-                    </div>
+                <div
+                    class="navigation-menu__trigger open-trigger"
+                    :class="{ 'keep-visible': !content.closeTrigger }"
+                    ww-responsive="menu-button"
+                >
+                    <wwElement v-bind="content.button"></wwElement>
+                </div>
 
-                    <div
-                        v-if="content.closeTrigger"
-                        class="navigation-menu__trigger close-trigger"
-                        ww-responsive="menu-button-close"
-                    >
-                        <wwElement
-                            class="closeElement"
-                            :class="{ editing: isEditing }"
-                            v-bind="content.closeElement"
-                        ></wwElement>
-                    </div>
-                </template>
-                <template v-else>
-                    <button
-                        class="navigation-menu__trigger open-trigger"
-                        :class="{ 'keep-visible': !content.closeTrigger }"
-                        ww-responsive="menu-button"
-                    >
-                        <wwElement v-bind="content.button"></wwElement>
-                    </button>
-                    <button
-                        v-if="content.closeTrigger"
-                        class="navigation-menu__trigger close-trigger"
-                        ww-responsive="menu-button-close"
-                    >
-                        <wwElement
-                            class="closeElement"
-                            :class="{ editing: isEditing }"
-                            v-bind="content.closeElement"
-                        ></wwElement>
-                    </button>
-                </template>
+                <div
+                    v-if="content.closeTrigger"
+                    class="navigation-menu__trigger close-trigger"
+                    ww-responsive="menu-button-close"
+                >
+                    <wwElement
+                        class="closeElement"
+                        :class="{ editing: isEditing }"
+                        v-bind="content.closeElement"
+                    ></wwElement>
+                </div>
             </label>
 
             <div
@@ -287,6 +271,9 @@ export default {
         height: 0px;
         margin: 0px;
         opacity: 0;
+        &.disabled {
+            pointer-events: none;
+        }
     }
 
     input:checked {
