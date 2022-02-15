@@ -13,67 +13,73 @@
             :style="layoutStyle"
             direction="row"
         ></wwLayout>
-        <button
-            v-if="content.triggerType !== 'button' && displayOpenTrigger"
-            class="navigation-menu__trigger"
-            ww-responsive="menu-button"
-            :style="iconStyle"
-            @click="triggerToggle"
-        >
-            <wwElement v-bind="content.button"></wwElement>
-        </button>
-        <div
-            v-else-if="content.triggerType === 'button' && displayOpenTrigger"
-            class="navigation-menu__trigger"
-            ww-responsive="menu-button"
-            :style="iconStyle"
-            @click="triggerToggle"
-        >
-            <wwElement v-bind="content.button"></wwElement>
-        </div>
+        <template v-if="useMobileMenu">
+            <input id="hidden-trigger" type="checkbox" :checked="displayForEdition" :disabled="displayForEdition" />
+            <label id="trigger-wrapper" for="hidden-trigger">
+                <template v-if="content.triggerType === 'button'">
+                    <div
+                        class="navigation-menu__trigger open-trigger"
+                        :class="{ 'keep-visible': !content.closeTrigger }"
+                        ww-responsive="menu-button"
+                    >
+                        <wwElement v-bind="content.button"></wwElement>
+                    </div>
 
-        <button
-            v-if="content.triggerType !== 'button' && displayCloseTrigger"
-            class="navigation-menu__trigger"
-            ww-responsive="menu-button-close"
-            :style="iconStyle"
-            @click="triggerToggle"
-        >
-            <wwElement class="closeElement" :class="{ editing: isEditing }" v-bind="content.closeElement"></wwElement>
-        </button>
-        <div
-            v-else-if="content.triggerType === 'button' && displayCloseTrigger"
-            class="navigation-menu__trigger"
-            ww-responsive="menu-button-close"
-            :style="iconStyle"
-            @click="triggerToggle"
-        >
-            <wwElement class="closeElement" :class="{ editing: isEditing }" v-bind="content.closeElement"></wwElement>
-        </div>
+                    <div
+                        v-if="content.closeTrigger"
+                        class="navigation-menu__trigger close-trigger"
+                        ww-responsive="menu-button-close"
+                    >
+                        <wwElement
+                            class="closeElement"
+                            :class="{ editing: isEditing }"
+                            v-bind="content.closeElement"
+                        ></wwElement>
+                    </div>
+                </template>
+                <template v-else>
+                    <button
+                        class="navigation-menu__trigger open-trigger"
+                        :class="{ 'keep-visible': !content.closeTrigger }"
+                        ww-responsive="menu-button"
+                    >
+                        <wwElement v-bind="content.button"></wwElement>
+                    </button>
+                    <button
+                        v-if="content.closeTrigger"
+                        class="navigation-menu__trigger close-trigger"
+                        ww-responsive="menu-button-close"
+                    >
+                        <wwElement
+                            class="closeElement"
+                            :class="{ editing: isEditing }"
+                            v-bind="content.closeElement"
+                        ></wwElement>
+                    </button>
+                </template>
+            </label>
 
-        <div
-            v-show="isMenuDisplayed"
-            class="navigation-menu__backdrop"
-            :class="{ open: isOpen }"
-            ww-responsive="backdrop"
-            :style="{ backgroundColor: content.backdropColor }"
-            @click.prevent.stop="triggerToggle"
-        ></div>
-        <div v-show="isMenuDisplayed" class="navigation-menu__container" :class="{ open: isOpen }">
             <div
-                class="navigation-menu__panel"
-                :class="[content.menuType, { full: content.fullHeight }]"
-                ww-responsive="panel"
-                :style="navigationPanelStyle"
-            >
-                <wwLayout
-                    class="navigation-menu__panel-items"
-                    :class="{ '-pushLast': !!content.pushLast }"
-                    path="elements"
+                class="navigation-menu__backdrop"
+                ww-responsive="backdrop"
+                :style="{ '--menu-top': content.menuTopOrigin, backgroundColor: content.backdropColor }"
+            ></div>
+            <div class="navigation-menu__container">
+                <div
+                    class="navigation-menu__panel"
+                    :class="[content.menuType, { full: content.fullHeight }]"
+                    ww-responsive="panel"
+                    :style="navigationPanelStyle"
                 >
-                </wwLayout>
+                    <wwLayout
+                        class="navigation-menu__panel-items"
+                        :class="{ '-pushLast': !!content.pushLast }"
+                        path="elements"
+                    >
+                    </wwLayout>
+                </div>
             </div>
-        </div>
+        </template>
         <!-- wwEditor:start -->
         <div class="navigation-menu__bubble">
             <wwEditorIcon small name="menu"></wwEditorIcon>
@@ -92,41 +98,34 @@ export default {
         /* wwEditor:end */
     },
     emits: ['update:content'],
-    data() {
-        return {
-            isOpen: false,
-            menuTop: 0,
-            menuMaxHeight: '',
-        };
-    },
     computed: {
-        isMenuDisplayed() {
+        displayForEdition() {
+            /* wwEditor:start */
+            return this.content.displayForEdition;
+            /* wwEditor:end */
+            return false;
+        },
+        useMobileMenu() {
             if (this.content.menuBreakpoint === 'laptop') return true;
             if (this.content.menuBreakpoint === 'tablet')
                 return this.wwFrontState.screenSize === 'mobile' || this.wwFrontState.screenSize === 'tablet';
             return this.wwFrontState.screenSize === 'mobile';
         },
         navigationStyle() {
-            if (this.isMenuDisplayed) return { 'justify-content': 'flex-end' };
+            if (this.useMobileMenu) return { 'justify-content': 'flex-end' };
             else return { 'justify-content': 'unset' };
         },
         layoutStyle() {
             return {
                 justifyContent: this.content.horizontalAlignement,
                 alignItems: this.content.verticalAlignement,
-                display: this.isMenuDisplayed ? 'none' : 'flex',
-            };
-        },
-        iconStyle() {
-            return {
-                display: this.isMenuDisplayed ? 'block' : 'none',
+                display: this.useMobileMenu ? 'none' : 'flex',
             };
         },
         navigationPanelStyle() {
             return {
                 '--menu-size': this.content.menuType === 'dropdown' ? '100%' : this.content.menuSize,
-                top: `${this.menuTop}px`,
-                'max-height': this.menuMaxHeight,
+                '--menu-top': this.content.menuTopOrigin,
                 'background-color': this.content.backgroundColor,
             };
         },
@@ -137,87 +136,65 @@ export default {
             // eslint-disable-next-line no-unreachable
             return false;
         },
-        displayOpenTrigger() {
-            if (!this.content.closeTrigger) {
-                return true;
-            } else if (this.content.closeTrigger && !this.isOpen) {
-                return true;
-            } else {
-                return false;
-            }
-        },
-        displayCloseTrigger() {
-            return this.content.closeTrigger && this.isOpen;
-        },
     },
     watch: {
-        'content.topOrigin'() {
-            if (this.isOpen) this.computeMenuValues();
-        },
         'content.triggerType'(newVal) {
             this.updateTriggerType(newVal);
         },
         'content.closeTrigger'(newVal) {
             if (newVal) {
                 this.handleCloseElement();
-                wwLib.$on('wwLink:closePopup', this.closeMenu);
             } else {
                 this.$emit('update:content', { closeElement: null });
-                wwLib.$off('wwLink:closePopup', this.closeMenu);
             }
         },
     },
     mounted() {
         wwLib.$on('wwLink:clicked', this.closeMenu);
-
-        if (this.content.closeTrigger) {
-            wwLib.$on('wwLink:closePopup', this.closeMenu);
-        }
     },
     unmounted() {
         wwLib.$off('wwLink:clicked', this.closeMenu);
-        wwLib.$off('wwLink:closePopup', this.closeMenu);
     },
     methods: {
-        triggerToggle() {
-            /* wwEditor:start */
-            if (this.isEditing) return;
-            /* wwEditor:end */
-            this.toggleMenu();
-        },
-        toggleMenu() {
-            this.isOpen = !this.isOpen;
-            if (this.isOpen) this.computeMenuValues();
-        },
-        computeMenuValues() {
-            this.menuTop =
-                this.content.topOrigin === 'top'
-                    ? this.$el.getBoundingClientRect().top
-                    : this.$el.getBoundingClientRect().bottom;
-            this.menuMaxHeight = `calc(100vh - ${this.menuTop}px)`;
-        },
-        closeMenu() {
-            this.isOpen = false;
-        },
         async updateTriggerType(type) {
             let triggerElement, closeElement;
 
             switch (type) {
                 case 'button':
-                    triggerElement = await wwLib.createElement('ww-button', { text: 'Open menu' }, {}, this.wwFrontState.sectionId);
+                    triggerElement = await wwLib.createElement(
+                        'ww-button',
+                        { text: 'Open menu' },
+                        {},
+                        this.wwFrontState.sectionId
+                    );
                     this.$emit('update:content', { button: triggerElement });
 
                     if (this.content.closeTrigger) {
-                        closeElement = await wwLib.createElement('ww-button', { text: 'Close menu' }, {},  this.wwFrontState.sectionId);
+                        closeElement = await wwLib.createElement(
+                            'ww-button',
+                            { text: 'Close menu' },
+                            {},
+                            this.wwFrontState.sectionId
+                        );
                         this.$emit('update:content', { closeElement });
                     }
                     break;
                 case 'icon':
-                    triggerElement = await wwLib.createElement('ww-icon', { icon: 'fas fa-bars' }, {}, this.wwFrontState.sectionId);
+                    triggerElement = await wwLib.createElement(
+                        'ww-icon',
+                        { icon: 'fas fa-bars' },
+                        {},
+                        this.wwFrontState.sectionId
+                    );
                     this.$emit('update:content', { button: triggerElement });
 
                     if (this.content.closeTrigger) {
-                        closeElement = await wwLib.createElement('ww-icon', { icon: 'fas fa-times' },{},  this.wwFrontState.sectionId);
+                        closeElement = await wwLib.createElement(
+                            'ww-icon',
+                            { icon: 'fas fa-times' },
+                            {},
+                            this.wwFrontState.sectionId
+                        );
                         this.$emit('update:content', { closeElement });
                     }
                     break;
@@ -225,7 +202,7 @@ export default {
                     triggerElement = await wwLib.createElement(
                         'ww-image',
                         { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
-                        { style: { default: { width: '30px', height: '30px' } } }, 
+                        { style: { default: { width: '30px', height: '30px' } } },
                         this.wwFrontState.sectionId
                     );
                     this.$emit('update:content', { button: triggerElement });
@@ -234,7 +211,7 @@ export default {
                         closeElement = await wwLib.createElement(
                             'ww-image',
                             { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
-                            { style: { default: { width: '30px', height: '30px' } } }, 
+                            { style: { default: { width: '30px', height: '30px' } } },
                             this.wwFrontState.sectionId
                         );
                         this.$emit('update:content', { closeElement });
@@ -250,7 +227,7 @@ export default {
 
             switch (this.content.triggerType) {
                 case 'button':
-                    closeElement = await wwLib.createElement('ww-button',{}, {}, this.wwFrontState.sectionId);
+                    closeElement = await wwLib.createElement('ww-button', {}, {}, this.wwFrontState.sectionId);
                     this.$emit('update:content', { closeElement });
                     break;
                 case 'icon':
@@ -272,22 +249,60 @@ export default {
 
 <style lang="scss" scoped>
 :root {
-    --menu-size: '60%';
+    --menu-size: 60%;
+    --menu-top: 0px;
 }
 
 .navigation-menu {
     position: relative;
     display: flex;
 
+    #trigger-wrapper {
+        z-index: 12;
+    }
+
+    input:not(:checked) ~ label {
+        .open-trigger {
+            display: block;
+        }
+        .close-trigger {
+            display: none;
+        }
+    }
+
+    input:checked ~ label {
+        .open-trigger {
+            display: none;
+            &.keep-visible {
+                display: block;
+            }
+        }
+        .close-trigger {
+            display: block;
+        }
+    }
+
+    input {
+        width: 0px;
+        height: 0px;
+        margin: 0px;
+        opacity: 0;
+    }
+
+    input:checked {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        z-index: 9999;
+    }
+
     &__trigger {
         min-width: 10px;
         min-height: 10px;
-
-        .closeElement {
-            &.editing {
-                z-index: 11;
-            }
-        }
+        z-index: 11;
     }
 
     &__items {
@@ -309,10 +324,10 @@ export default {
         &.right,
         &.left {
             position: fixed;
-            top: 0;
+            top: var(--menu-top);
             transition: transform 0.3s ease;
             &.full {
-                height: 100vh;
+                height: calc(100vh - var(--menu-top));
                 overflow-y: auto;
             }
         }
@@ -325,10 +340,10 @@ export default {
             transform: translate(-100%, 0);
         }
         &.dropdown {
-            position: absolute;
+            position: fixed;
             right: 0;
             left: 0;
-            top: 0;
+            top: var(--menu-top);
             transition: opacity 0.3s ease;
             pointer-events: none;
             visibility: hidden;
@@ -346,34 +361,32 @@ export default {
     &__backdrop {
         z-index: 10;
         position: fixed;
-        top: 0;
+        top: var(--menu-top);
         left: 0;
         right: 0;
         bottom: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
         opacity: 0;
-        height: 100vh;
+        height: calc(100% - var(--menu-top));
 
-        &.open {
+        input:checked ~ & {
             opacity: 1;
-            pointer-events: all;
         }
     }
 
     &__container {
         z-index: 11;
         position: fixed;
-        top: 0;
+        top: var(--menu-top);
         left: 0;
         right: 0;
-        bottom: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
         opacity: 0;
-        height: 100vh;
+        height: calc(100vh - var(--menu-top));
 
-        &.open {
+        input:checked ~ & {
             opacity: 1;
 
             & .dropdown {

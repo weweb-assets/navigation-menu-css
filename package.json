@@ -1,5 +1,5 @@
 {
-    "name": "navigation-menu",
+    "name": "navigation-menu-ssr",
     "repository": {
         "type": "git",
         "url": "https://github.com/weweb-assets/navigation-menu"
