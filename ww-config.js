@@ -1,8 +1,8 @@
 export default {
     editor: {
         label: {
-            en: 'Navigation menu',
-            fr: 'Menu de navigation',
+            en: 'Navigation menu (SSR)',
+            fr: 'Menu de navigation (SSR)',
         },
         menuOptions: {
             quick: {
@@ -129,18 +129,15 @@ export default {
             responsive: true,
             defaultValue: '60%',
         },
-        topOrigin: {
+        menuTopOrigin: {
             label: { en: 'Top origin', fr: 'Top origin' },
-            type: 'TextSelect',
+            type: 'Length',
             options: {
-                options: [
-                    { value: 'top', label: { en: 'Top' } },
-                    { value: 'under-navbar', label: { en: 'Under the navbar' } },
-                ],
+                unitChoices: [{ value: 'px', label: 'px', min: 0, max: 1000 }],
             },
             section: 'settings',
             responsive: true,
-            defaultValue: 'under-navbar',
+            defaultValue: '0px',
         },
         triggerType: {
             label: {
@@ -168,13 +165,11 @@ export default {
             section: 'settings',
             defaultValue: false,
         },
-        toggle: {
-            type: 'Button',
-            options: {
-                text: { en: 'Toggle mobile menu' },
-                action: 'toggleMenu',
-            },
+        displayForEdition: {
+            type: 'OnOff',
+            label: { en: 'Display menu for edition', fr: 'Afficher le menu pour édition' },
             section: 'settings',
+            defaultValue: false,
         },
         elements: {
             hidden: true,
@@ -187,7 +182,7 @@ export default {
         button: {
             // It's called button to ensure backward compatibility
             hidden: true,
-            defaultValue: {isWwObject: true, type: "ww-button"},
+            defaultValue: { isWwObject: true, type: 'ww-button' },
         },
         closeElement: {
             hidden: true,

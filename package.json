@@ -1,10 +1,10 @@
 {
-    "name": "navigation-menu",
+    "name": "navigation-menu-css",
     "repository": {
         "type": "git",
-        "url": "https://github.com/weweb-assets/navigation-menu"
+        "url": "https://github.com/weweb-assets/navigation-menu-css"
     },
-    "version": "3.2.0",
+    "version": "1.0.0",
     "license": "MIT",
     "scripts": {
         "build": "weweb build",
