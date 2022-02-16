@@ -1,8 +1,8 @@
 export default {
     editor: {
         label: {
-            en: 'Navigation menu (SSR)',
-            fr: 'Menu de navigation (SSR)',
+            en: 'Navigation menu (NoJS)',
+            fr: 'Menu de navigation (NoJS)',
         },
         menuOptions: {
             quick: {

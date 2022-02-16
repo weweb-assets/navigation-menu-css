@@ -86,7 +86,7 @@ export default {
     computed: {
         displayForEdition() {
             /* wwEditor:start */
-            return this.content.displayForEdition;
+            return this.wwEditorState.sidepanelContent.displayForEdition && this.isEditing;
             /* wwEditor:end */
             return false;
         },
