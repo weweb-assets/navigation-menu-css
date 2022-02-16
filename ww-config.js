@@ -88,6 +88,13 @@ export default {
         },
 
         // Settings
+        displayForEdition: {
+            type: 'OnOff',
+            label: { en: 'Display menu (edition)', fr: 'Afficher le menu (édition)' },
+            section: 'settings',
+            defaultValue: false,
+            editorOnly: true,
+        },
         menuBreakpoint: {
             label: { en: 'Mobile menu starting at' },
             type: 'TextRadioGroup',
@@ -162,12 +169,6 @@ export default {
                 fr: 'Element different pour fermer',
             },
             type: 'OnOff',
-            section: 'settings',
-            defaultValue: false,
-        },
-        displayForEdition: {
-            type: 'OnOff',
-            label: { en: 'Display menu for edition', fr: 'Afficher le menu pour édition' },
             section: 'settings',
             defaultValue: false,
         },
