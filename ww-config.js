@@ -4,11 +4,6 @@ export default {
             en: 'Navigation menu (NoJS)',
             fr: 'Menu de navigation (NoJS)',
         },
-        menuOptions: {
-            quick: {
-                sections: ['menuBreakpoint', 'toggle'],
-            },
-        },
     },
     properties: {
         horizontalAlignement: {
