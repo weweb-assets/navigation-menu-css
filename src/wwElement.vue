@@ -134,12 +134,6 @@ export default {
             }
         },
     },
-    mounted() {
-        wwLib.$on('wwLink:clicked', this.closeMenu);
-    },
-    unmounted() {
-        wwLib.$off('wwLink:clicked', this.closeMenu);
-    },
     methods: {
         async updateTriggerType(type) {
             let triggerElement, closeElement;
