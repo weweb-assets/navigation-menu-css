@@ -83,6 +83,10 @@ export default {
         /* wwEditor:end */
     },
     emits: ['update:content'],
+    setup() {
+        const { createElement } = wwLib.useCreateElement();
+        return { createElement }
+    },
     computed: {
         displayForEdition() {
             /* wwEditor:start */
@@ -140,58 +144,60 @@ export default {
 
             switch (type) {
                 case 'button':
-                    triggerElement = await wwLib.createElement(
+                    triggerElement = await this.createElement(
                         'ww-button',
-                        { text: 'Open menu' },
-                        {},
-                        this.wwFrontState.sectionId
+                        {
+                            content: { text: 'Open menu' }
+                        }
                     );
                     this.$emit('update:content', { button: triggerElement });
 
                     if (this.content.closeTrigger) {
-                        closeElement = await wwLib.createElement(
+                        closeElement = await this.createElement(
                             'ww-button',
-                            { text: 'Close menu' },
-                            {},
-                            this.wwFrontState.sectionId
+                            {
+                                content: { text: 'Close menu' },
+                            }
                         );
                         this.$emit('update:content', { closeElement });
                     }
                     break;
                 case 'icon':
-                    triggerElement = await wwLib.createElement(
+                    triggerElement = await this.createElement(
                         'ww-icon',
-                        { icon: 'fas fa-bars' },
-                        {},
-                        this.wwFrontState.sectionId
+                        {
+                            content: { icon: 'fas fa-bars' },
+                        }
                     );
                     this.$emit('update:content', { button: triggerElement });
 
                     if (this.content.closeTrigger) {
-                        closeElement = await wwLib.createElement(
+                        closeElement = await this.createElement(
                             'ww-icon',
-                            { icon: 'fas fa-times' },
-                            {},
-                            this.wwFrontState.sectionId
+                            {
+                                content: { icon: 'fas fa-times' },
+                            },
                         );
                         this.$emit('update:content', { closeElement });
                     }
                     break;
                 case 'image':
-                    triggerElement = await wwLib.createElement(
+                    triggerElement = await this.createElement(
                         'ww-image',
-                        { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
-                        { style: { default: { width: '30px', height: '30px' } } },
-                        this.wwFrontState.sectionId
+                        { 
+                            content: { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
+                            state: { style: { default: { width: '30px', height: '30px' } } },
+                        }
                     );
                     this.$emit('update:content', { button: triggerElement });
 
                     if (this.content.closeTrigger) {
-                        closeElement = await wwLib.createElement(
+                        closeElement = await this.createElement(
                             'ww-image',
-                            { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
-                            { style: { default: { width: '30px', height: '30px' } } },
-                            this.wwFrontState.sectionId
+                            {
+                                content: { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
+                                state: { style: { default: { width: '30px', height: '30px' } } },
+                            }
                         );
                         this.$emit('update:content', { closeElement });
                     }
@@ -206,15 +212,15 @@ export default {
 
             switch (this.content.triggerType) {
                 case 'button':
-                    closeElement = await wwLib.createElement('ww-button', {}, {}, this.wwFrontState.sectionId);
+                    closeElement = await this.createElement('ww-button');
                     this.$emit('update:content', { closeElement });
                     break;
                 case 'icon':
-                    closeElement = await wwLib.createElement('ww-icon', {}, {}, this.wwFrontState.sectionId);
+                    closeElement = await this.createElement('ww-icon');
                     this.$emit('update:content', { closeElement });
                     break;
                 case 'image':
-                    closeElement = await wwLib.createElement('ww-image', {}, {}, this.wwFrontState.sectionId);
+                    closeElement = await this.createElement('ww-image');
                     this.$emit('update:content', { closeElement });
                     break;
 
