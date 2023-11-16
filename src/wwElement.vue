@@ -186,7 +186,7 @@ export default {
                         'ww-image',
                         { 
                             content: { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
-                            state: { style: { default: { width: '30px', height: '30px' } } },
+                            _state: { style: { default: { width: '30px', height: '30px' } } },
                         }
                     );
                     this.$emit('update:content', { button: triggerElement });
@@ -196,7 +196,7 @@ export default {
                             'ww-image',
                             {
                                 content: { url: 'https://cdn.weweb.io/public/images/no_preview.jpg' },
-                                state: { style: { default: { width: '30px', height: '30px' } } },
+                                _state: { style: { default: { width: '30px', height: '30px' } } },
                             }
                         );
                         this.$emit('update:content', { closeElement });
