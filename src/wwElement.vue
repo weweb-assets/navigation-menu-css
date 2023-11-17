@@ -83,10 +83,12 @@ export default {
         /* wwEditor:end */
     },
     emits: ['update:content'],
+    /* wwEditor:start */
     setup() {
         const { createElement } = wwLib.useCreateElement();
         return { createElement }
     },
+    /* wwEditor:end */
     computed: {
         displayForEdition() {
             /* wwEditor:start */
@@ -126,6 +128,7 @@ export default {
             return false;
         },
     },
+    /* wwEditor:start */
     watch: {
         'content.triggerType'(newVal) {
             this.updateTriggerType(newVal);
@@ -138,7 +141,9 @@ export default {
             }
         },
     },
+    /* wwEditor:end */
     methods: {
+        /* wwEditor:start */
         async updateTriggerType(type) {
             let triggerElement, closeElement;
 
@@ -228,6 +233,7 @@ export default {
                     break;
             }
         },
+        /* wwEditor:end */
     },
 };
 </script>
