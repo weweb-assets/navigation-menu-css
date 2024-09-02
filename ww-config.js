@@ -5,6 +5,9 @@ export default {
             fr: 'Menu de navigation (NoJS)',
         },
     },
+    options: {
+        displayAllowedValues: ['flex', 'inline-flex'],
+    },
     properties: {
         horizontalAlignement: {
             label: { en: 'Horizontal alignment', fr: 'Alignement horizontal' },
