@@ -65,11 +65,6 @@
                 </wwLayout>
             </div>
         </div>
-        <!-- wwEditor:start -->
-        <div class="navigation-menu__bubble">
-            <wwEditorIcon small name="menu"></wwEditorIcon>
-        </div>
-        <!-- wwEditor:end -->
     </div>
 </template>
 
@@ -246,7 +241,6 @@ export default {
 
 .navigation-menu {
     position: relative;
-    display: flex;
 
     #trigger-wrapper {
         z-index: 12;
@@ -395,54 +389,12 @@ export default {
             }
         }
     }
-    &__bubble {
-        display: flex;
-        position: absolute;
-        top: 5px;
-        left: 0;
-        transform: translate(-50%, -50%);
-        border-radius: 100%;
-        padding: var(--ww-spacing-01);
-        transition: opacity 0.2s ease;
-        z-index: 101;
-        opacity: 0;
-        cursor: pointer;
-        background-color: var(--ww-color-green-500);
-        color: var(--ww-color-white);
-        justify-content: center;
-        align-items: center;
-        pointer-events: none;
-        &:after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(45deg);
-            width: 30px;
-            height: 30px;
-        }
-    }
-    &.editing:hover {
-        > .navigation-menu__bubble {
-            opacity: 1;
-            pointer-events: all;
-        }
-    }
 }
-</style>
+.navigation-menu__items.-pushLast::last-child {
+    margin-left: auto !important;
+}
 
-<style lang="scss">
-.navigation-menu {
-    &__items {
-        &.-pushLast > .ww-layout-item:last-child {
-            margin-left: auto;
-        }
-    }
-
-    &__panel-items {
-        &.-pushLast > .ww-layout-item:last-child {
-            margin-top: auto;
-        }
-    }
+.navigation-menu__panel-items.-pushLast::last-child {
+    margin-top: auto !important;
 }
 </style>
